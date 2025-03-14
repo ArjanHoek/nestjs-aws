@@ -47,7 +47,7 @@ jobs:
           push-to-registry: true
 
   deploy:
-    needs: build
+    needs: push_to_registry
     runs-on: ubuntu-latest
     steps:
       - name: Install SSH key
