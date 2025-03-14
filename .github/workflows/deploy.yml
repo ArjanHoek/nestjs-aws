@@ -57,7 +57,7 @@ jobs:
       - name: Deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@ec2-51-20-94-170.eu-north-1.compute.amazonaws.com << 'EOF'
-          docker pull ahoekdev/ahoekdevrepo:latest
+          docker pull ahoekdev/ahoekdevrepo
           docker stop $(docker ps -a -q) || true
-          docker run -d -p 80:80 ahoekdev/ahoekdevrepo:latest
+          docker run -d -p 80:80 ahoekdev/ahoekdevrepo
           EOF
