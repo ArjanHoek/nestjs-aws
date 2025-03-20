@@ -30,7 +30,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ DOCKER_REPOSITORY }}
+          images: ${{ secrets.DOCKER_REPOSITORY }}
 
       - name: Build and push Docker image
         id: push
@@ -45,7 +45,7 @@ jobs:
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v2
         with:
-          subject-name: index.docker.io/${{ DOCKER_REPOSITORY }}
+          subject-name: index.docker.io/${{ secrets.DOCKER_REPOSITORY }}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
 
@@ -59,9 +59,9 @@ jobs:
           ssh-private-key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
       - name: Deploy to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ EC2_USER_PUBLIC_DNS }} << 'EOF'
-          docker pull ${{ DOCKER_REPOSITORY }}:main
+          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER_PUBLIC_DNS }} << 'EOF'
+          docker pull ${{ secrets.DOCKER_REPOSITORY }}:main
           docker stop $(docker ps -a -q) || true
-          docker run -d -p 80:80 --rm ${{ DOCKER_REPOSITORY }}:main
+          docker run -d -p 80:80 --rm ${{ secrets.DOCKER_REPOSITORY }}:main
           docker image prune -a -f
           EOF
