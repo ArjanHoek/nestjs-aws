@@ -62,5 +62,6 @@ jobs:
           ssh -o StrictHostKeyChecking=no ubuntu@ec2-13-49-0-30.eu-north-1.compute.amazonaws.com << 'EOF'
           docker pull ahoekdev/ahoekdevrepo:main
           docker stop $(docker ps -a -q) || true
-          docker run -d -p 80:80 ahoekdev/ahoekdevrepo:main
+          docker run -d -p 80:80 --rm ahoekdev/ahoekdevrepo:main
+          docker image prune -a -f
           EOF
